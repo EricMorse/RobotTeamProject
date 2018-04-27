@@ -1,7 +1,7 @@
 """
 Functions for SPINNING the robot LEFT and RIGHT.
-Authors: David Fisher, David Mutchler and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+Authors: David Fisher, David Mutchler and Xiaoyu Ma.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 # TODO: 2. Implment spin_left_seconds, then the relevant part of the test function.
 #          Test and correct as needed.
@@ -28,6 +28,22 @@ def test_spin_left_spin_right():
       3. Same as #2, but runs spin_left_by_encoders.
       4. Same as #1, 2, 3, but tests the spin_right functions.
     """
+    print('---------------------------------------------')
+    print(' Test spin left and spin right')
+    print('---------------------------------------------')
+    ev3.Sound.speak('Test spin left and spin right').wait()
+
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+
+    assert left_motor.connected
+    assert right_motor.connected
+
+    spin_left_seconds(5, 60, "brake")
+    time.sleep(1)
+
+    spin_left_seconds(2, 30, "hold")
+    time.sleep(1)
 
 
 def spin_left_seconds(seconds, speed, stop_action):
@@ -36,6 +52,16 @@ def spin_left_seconds(seconds, speed, stop_action):
     where speed is between -100 (full speed spin_right) and 100 (full speed spin_left).
     Uses the given stop_action.
     """
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+
+    left_sp = - speed * 8
+    right_sp = speed * 8
+    left_motor.run_forever(speed_sp=left_sp)
+    right_motor.run_forever(speed_sp=right_sp)
+    time.sleep(seconds)
+    left_motor.stop()
+    right_motor.stop(stop_action=stop_action)
 
 
 def spin_left_by_time(degrees, speed, stop_action):
@@ -62,6 +88,7 @@ def spin_left_by_encoders(degrees, speed, stop_action):
 
 def spin_right_seconds(seconds, speed, stop_action):
     """ Calls spin_left_seconds with negative speeds to achieve spin_right motion. """
+    spin_left_seconds(seconds, -speed, stop_action)
 
 
 def spin_right_by_time(degrees, speed, stop_action):

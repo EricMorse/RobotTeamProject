@@ -1,9 +1,9 @@
 """
 Functions for moving the robot FORWARD and BACKWARD.
-Authors: David Fisher, David Mutchler and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+Authors: David Fisher, David Mutchler and Eric Morse.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
-# TODO: 2. Implment forward_seconds, then the relevant part of the test function.
+# DONE: 2. Implment forward_seconds, then the relevant part of the test function.
 #          Test and correct as needed.
 #   Then repeat for forward_by_time.
 #   Then repeat for forward_by_encoders.
@@ -28,6 +28,56 @@ def test_forward_backward():
       4. Same as #1, 2, 3, but tests the BACKWARD functions.
     """
 
+    # Tests forward_seconds
+
+    seconds = 1  # Any value other than 0.
+    while seconds != 0:
+        speed = int(input("Enter a speed for both motors (0 to 100): "))
+        seconds = int(input("Enter a time to drive (seconds): "))
+        stop_method = input("Enter stop action: ")
+        forward_seconds(seconds, speed, stop_method)
+
+    # Tests forward_by_time
+    inches = 1
+    while inches != 0:
+        speed = int(input("Enter a speed for both motors (0 to 100): "))
+        inches = int(input("Enter inches for motors"))
+        stop_method = input("Enter stop action: ")
+        forward_by_time(inches, speed, stop_method)
+
+    # Tests forwared by encoders
+    inches = 1
+    while inches != 0:
+        speed = int(input("Enter a speed for both motors (0 to 100): "))
+        inches = int(input("Enter inches for motors"))
+        stop_method = input("Enter stop action: ")
+        forward_by_encoders(inches, speed, stop_method)
+
+        # Tests backward_seconds
+
+        seconds = 1  # Any value other than 0.
+        while seconds != 0:
+            speed = int(input("Enter a speed for both motors (0 to 100): "))
+            seconds = int(input("Enter a time to drive (seconds): "))
+            stop_method = input("Enter stop action: ")
+            backward_seconds(seconds, speed, stop_method)
+
+        # Tests backward_by_time
+        inches = 1
+        while inches != 0:
+            speed = int(input("Enter a speed for both motors (0 to 100): "))
+            inches = int(input("Enter inches for motors"))
+            stop_method = input("Enter stop action: ")
+            backward_by_time(inches, speed, stop_method)
+
+        # Tests backward by encoders
+        inches = 1
+        while inches != 0:
+            speed = int(input("Enter a speed for both motors (0 to 100): "))
+            inches = int(input("Enter inches for motors"))
+            stop_method = input("Enter stop action: ")
+            backward_by_encoders(inches, speed, stop_method)
+
 
 def forward_seconds(seconds, speed, stop_action):
     """
@@ -35,6 +85,20 @@ def forward_seconds(seconds, speed, stop_action):
     where speed is between -100 (full speed backward) and 100 (full speed forward).
     Uses the given stop_action.
     """
+
+    # Connect two large motors on output ports B and C
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+
+    # Check that the motors are actually connected
+    assert left_motor.connected
+    assert right_motor.connected
+
+    left_motor.run_forever(speed_sp=speed*8, stop_action=stop_action)
+    right_motor.run_forever(speed_sp=speed*8, stop_action=stop_action)
+    time.sleep(seconds)
+    left_motor.stop()
+    right_motor.stop(stop_action=stop_action)
 
 
 def forward_by_time(inches, speed, stop_action):
@@ -47,6 +111,22 @@ def forward_by_time(inches, speed, stop_action):
       2. Sleep for the computed number of seconds.
       3. Stop moving.
     """
+    # Connect two large motors on output ports B and C
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+
+    # Compute time at given speed and inches
+    seconds = (inches * 90) / (speed * 8)
+
+    # Check that the motors are actually connected
+    assert left_motor.connected
+    assert right_motor.connected
+
+    left_motor.run_forever(speed_sp=(speed * 8))
+    right_motor.run_forever(speed_sp=(speed * 8))
+    time.sleep(seconds)
+    left_motor.stop()
+    right_motor.stop(stop_action=stop_action)
 
 
 def forward_by_encoders(inches, speed, stop_action):
@@ -57,18 +137,33 @@ def forward_by_encoders(inches, speed, stop_action):
       1. Compute the number of degrees the wheels should spin to achieve the desired distance.
       2. Move until the computed number of degrees is reached.
     """
+    # Connect two large motors on output ports B and C
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+
+    degrees = inches*90
+
+    # Check that the motors are actually connected
+    assert left_motor.connected
+    assert right_motor.connected
+
+    left_motor.run_to_rel_pos(position_sp=degrees)
+    right_motor.run_to_rel_pos(position_sp=degrees)
 
 
 def backward_seconds(seconds, speed, stop_action):
     """ Calls forward_seconds with negative speeds to achieve backward motion. """
+    forward_seconds(seconds, -speed, stop_action)
 
 
 def backward_by_time(inches, speed, stop_action):
     """ Calls forward_by_time with negative speeds to achieve backward motion. """
+    forward_by_time(inches, -speed, stop_action)
 
 
 def backward_by_encoders(inches, speed, stop_action):
     """ Calls forward_by_encoders with negative speeds to achieve backward motion. """
+    forward_by_encoders(inches, -speed, stop_action)
 
 
 test_forward_backward()

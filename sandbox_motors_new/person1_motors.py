@@ -44,16 +44,27 @@ def test_forward_backward():
 
     # Tests forwared by encoders
     # inches = 1
-    forward_by_encoders(inches, speed, stop_method)
+    start = int(input("Start (1 = yes): "))
+    if start == 1:
+        forward_by_encoders(inches, speed, stop_method)
 
     # Tests backward_seconds
-    backward_seconds(seconds, speed, stop_method)
+    start = 0
+    start = int(input("Start (1 = yes): "))
+    if start == 1:
+        backward_seconds(seconds, speed, stop_method)
 
     # Tests backward_by_time
-    backward_by_time(inches, speed, stop_method)
+    start = 0
+    start = int(input("Start (1 = yes): "))
+    if start == 1:
+        backward_by_time(inches, speed, stop_method)
 
     # Tests backward by encoders
-    backward_by_encoders(inches, speed, stop_method)
+    start = 0
+    start = int(input("Start (1 = yes): "))
+    if start == 1:
+        backward_by_encoders(inches, speed, stop_method)
 
 
 def forward_seconds(seconds, speed, stop_action):
@@ -71,11 +82,13 @@ def forward_seconds(seconds, speed, stop_action):
     assert left_motor.connected
     assert right_motor.connected
 
-    left_motor.run_forever(speed_sp=speed*8, stop_action=stop_action)
-    right_motor.run_forever(speed_sp=speed*8, stop_action=stop_action)
+    left_motor.stop_action = stop_action
+    right_motor.stop_action = stop_action
+    left_motor.run_forever(speed_sp=speed*8)
+    right_motor.run_forever(speed_sp=speed*8)
     time.sleep(seconds)
     left_motor.stop()
-    right_motor.stop(stop_action=stop_action)
+    right_motor.stop()
 
 
 def forward_by_time(inches, speed, stop_action):
@@ -99,12 +112,14 @@ def forward_by_time(inches, speed, stop_action):
     assert left_motor.connected
     assert right_motor.connected
 
-    left_motor.run_forever(speed_sp=(speed * 8))
-    right_motor.run_forever(speed_sp=(speed * 8))
-    time.sleep(seconds)
-    left_motor.stop()
-    right_motor.stop(stop_action=stop_action)
-
+    left_motor.speed_sp = speed * 8
+    right_motor.speed_sp = speed * 8
+    left_motor.stop_action = stop_action
+    right_motor.stop_action = stop_action
+    left_motor.time_sp = seconds * 1000
+    right_motor.time_sp = seconds * 1000
+    left_motor.run_timed()
+    right_motor.run_timed()
 
 def forward_by_encoders(inches, speed, stop_action):
     """
@@ -123,6 +138,11 @@ def forward_by_encoders(inches, speed, stop_action):
     # Check that the motors are actually connected
     assert left_motor.connected
     assert right_motor.connected
+
+    left_motor.speed_sp = speed * 8
+    right_motor.speed_sp = speed * 8
+    left_motor.stop_action = stop_action
+    right_motor.stop_action = stop_action
 
     left_motor.run_to_rel_pos(position_sp=degrees)
     right_motor.run_to_rel_pos(position_sp=degrees)

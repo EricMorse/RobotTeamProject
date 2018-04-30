@@ -30,53 +30,30 @@ def test_forward_backward():
 
     # Tests forward_seconds
 
-    seconds = 1  # Any value other than 0.
-    while seconds != 0:
-        speed = int(input("Enter a speed for both motors (0 to 100): "))
-        seconds = int(input("Enter a time to drive (seconds): "))
-        stop_method = input("Enter stop action: ")
-        forward_seconds(seconds, speed, stop_method)
+    # seconds = 1
+    # Any value other than 0.
+    speed = int(input("Enter a speed for both motors (0 to 100): "))
+    seconds = int(input("Enter a time to drive (seconds): "))
+    stop_method = input("Enter stop action: ")
+    forward_seconds(seconds, speed, stop_method)
 
     # Tests forward_by_time
-    inches = 1
-    while inches != 0:
-        speed = int(input("Enter a speed for both motors (0 to 100): "))
-        inches = int(input("Enter inches for motors"))
-        stop_method = input("Enter stop action: ")
-        forward_by_time(inches, speed, stop_method)
+    # inches = 1
+    inches = int(input("Enter inches for motors"))
+    forward_by_time(inches, speed, stop_method)
 
     # Tests forwared by encoders
-    inches = 1
-    while inches != 0:
-        speed = int(input("Enter a speed for both motors (0 to 100): "))
-        inches = int(input("Enter inches for motors"))
-        stop_method = input("Enter stop action: ")
-        forward_by_encoders(inches, speed, stop_method)
+    # inches = 1
+    forward_by_encoders(inches, speed, stop_method)
 
-        # Tests backward_seconds
+    # Tests backward_seconds
+    backward_seconds(seconds, speed, stop_method)
 
-        seconds = 1  # Any value other than 0.
-        while seconds != 0:
-            speed = int(input("Enter a speed for both motors (0 to 100): "))
-            seconds = int(input("Enter a time to drive (seconds): "))
-            stop_method = input("Enter stop action: ")
-            backward_seconds(seconds, speed, stop_method)
+    # Tests backward_by_time
+    backward_by_time(inches, speed, stop_method)
 
-        # Tests backward_by_time
-        inches = 1
-        while inches != 0:
-            speed = int(input("Enter a speed for both motors (0 to 100): "))
-            inches = int(input("Enter inches for motors"))
-            stop_method = input("Enter stop action: ")
-            backward_by_time(inches, speed, stop_method)
-
-        # Tests backward by encoders
-        inches = 1
-        while inches != 0:
-            speed = int(input("Enter a speed for both motors (0 to 100): "))
-            inches = int(input("Enter inches for motors"))
-            stop_method = input("Enter stop action: ")
-            backward_by_encoders(inches, speed, stop_method)
+    # Tests backward by encoders
+    backward_by_encoders(inches, speed, stop_method)
 
 
 def forward_seconds(seconds, speed, stop_action):

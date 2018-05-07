@@ -119,7 +119,7 @@ def print_state_of_left_button_on_brick(n, seconds_per_print):
     # TODO: 3.  Implement and test this function.
     #           Tests have been written for you (above).
     # -------------------------------------------------------------------------
-
+    left_button = ev3.Button
 
 def run_test_wait_for_press_on_brick_button():
     """ Tests the   wait_for_UP_button_press   function. """

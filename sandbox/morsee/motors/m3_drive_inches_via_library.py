@@ -56,7 +56,7 @@ def main():
         if inches_target == 0:
             break
 
-        robot.backward(inches_target, speed_deg_per_second)
+        robot.turn_right(inches_target, speed_deg_per_second)
         ev3.Sound.beep().wait()  # Fun little beep
 
     print("Goodbye!")

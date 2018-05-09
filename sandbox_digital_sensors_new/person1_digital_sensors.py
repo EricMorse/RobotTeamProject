@@ -109,7 +109,9 @@ def print_state_of_touch_sensor(n, seconds_per_print):
     # TODO: 3.  Implement and test this function.
     #           Tests have been written for you (above).
     # -------------------------------------------------------------------------
-
+    touch_sensor = ev3.TouchSensor()
+    for k in range(n):
+        touch_sensor.on_red_up = lambda state: handle_up(state)
 
 def run_test_wait_for_press():
     """ Tests the   wait_for_press   function. """

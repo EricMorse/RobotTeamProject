@@ -118,6 +118,7 @@ def forward_by_time(inches, speed, stop_method):
     left_motor.run_timed()
     right_motor.run_timed()
 
+
 def forward_by_encoders(inches, speed, stop_method):
     """
     Makes the robot move forward the given number of inches at the given speed,

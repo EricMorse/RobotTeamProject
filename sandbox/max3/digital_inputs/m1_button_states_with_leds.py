@@ -90,7 +90,7 @@ def main():
             n_of_down += 1
             ev3.Leds.set_color(ev3.Leds.LEFT, led_colors[n_of_down % 4])
             ev3.Leds.set_color(ev3.Leds.RIGHT, led_colors[n_of_down % 4])
-            time.sleep(0.01)
+            time.sleep(1.0)
         time.sleep(1.0)
 
         # TODO: 4. Implement the down button to change the color of both LEDs.

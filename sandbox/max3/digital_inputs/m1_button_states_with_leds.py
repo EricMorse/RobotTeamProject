@@ -74,12 +74,10 @@ def main():
             print('up')
             ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)
             ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.BLACK)
-
         elif btn.left:
             print("left")
             ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
             ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.BLACK)
-
         elif btn.right:
             print("right")
             ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)

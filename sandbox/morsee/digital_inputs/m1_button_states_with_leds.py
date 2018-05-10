@@ -8,7 +8,7 @@ Much like we did in morsee of the motors unit, later we will show you different 
 Authors: David Fisher and Eric Morse.
 """  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
-# TODO: 2. Have someone on your team run this program as is on the EV3 and make sure everyone understands the code.
+# DONE: 2. Have someone on your team run this program as is on the EV3 and make sure everyone understands the code.
 #   You will exit the program by pressing the back button on the EV3 brick (button just below the screen).
 #   The back button is already implemented to exit the program (as you can see in the code below).
 
@@ -20,25 +20,25 @@ def main():
     print("--------------------------------------------")
     print(" Buttons and LEDs")
     print("--------------------------------------------")
-    ev3.Sound.speak("Buttons and L E Dees").wait()
+    #ev3.Sound.speak("Buttons and L E Dees").wait()
 
     # Opening LED dance (to show the LED syntax)
     # Red LEDs
-    ev3.Sound.speak("Red")
-    ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.RED)
-    ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
-    time.sleep(3)
+    #ev3.Sound.speak("Red")
+    #ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.RED)
+    #ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
+    #time.sleep(3)
 
     # Green LEDs
-    ev3.Sound.speak("Green")
-    ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
-    ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
-    time.sleep(3)
+    #ev3.Sound.speak("Green")
+    #ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
+    #ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
+    #time.sleep(3)
 
     # Turn LEDs off
-    ev3.Sound.speak("Off")
-    ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)
-    ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.BLACK)
+    #ev3.Sound.speak("Off")
+    #ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)
+    #ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.BLACK)
     # ev3.Leds.all_off()  # Could also use this single command if turning both LEDs off.
     print('Press the Back button on the EV3 to exit this program.')
 
@@ -90,25 +90,30 @@ def main():
         #   Since you are only allowed to use states, not event callbacks, this last request is a pain, but it's doable
         #     with a while loop that blocks code execution until the down instance variable is False.
         #     Use a time.sleep(0.01) inside the while loop to do nothing but wait for the button to be released.
-        if btn.down & current_color_index == 0:
+        if btn.down and current_color_index == 0:
+            print("down green")
             ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
             ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
             current_color_index = 1
-        elif btn.down & current_color_index == 1:
+        elif btn.down and current_color_index == 1:
+            print("down red")
             ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.RED)
             ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
             current_color_index = 2
-        elif btn.down & current_color_index == 2:
+        elif btn.down and current_color_index == 2:
+            print("down amber")
             ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.AMBER)
             ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.AMBER)
             current_color_index = 3
-        elif btn.down & current_color_index == 3:
+        elif btn.down and current_color_index == 3:
+            print("down black")
             ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)
             ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.BLACK)
             current_color_index = 0
 
 
-        # TODO: 5. Formally test your work. When you think you have the problem complete run these tests:
+
+        # DONE: 5. Formally test your work. When you think you have the problem complete run these tests:
         #   Press Left - Green left LED is on (try holding the button down for a few seconds when you to the press)
         #   Press Right - Right right LED is on
         #   Press Up - Both LEDs are off
@@ -134,7 +139,8 @@ def main():
     # Best practice to leave the LEDs on after you finish a program so you don't put away the robot while still on.
     ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
     ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
-    ev3.Sound.speak("Goodbye").wait()
+    print("Goodbye")
+    #ev3.Sound.speak("Goodbye").wait()
 
 
 # ----------------------------------------------------------------------

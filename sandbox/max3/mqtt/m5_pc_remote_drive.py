@@ -27,15 +27,13 @@ Authors: David Fisher and Xiaoyu Ma.
 
 import tkinter
 from tkinter import ttk
-import robot_controller as rc
 
 import mqtt_remote_method_calls as com
 
 
 def main():
-    # TODO: 2. Setup an mqtt_client.  Notice that since you don't need to receive any messages you do NOT need to have
+    # DONE: 2. Setup an mqtt_client.  Notice that since you don't need to receive any messages you do NOT need to have
     # a MyDelegate class.  Simply construct the MqttClient with no parameter in the constructor (easy).
-    #client = rc.Snatch3r()
     mqtt_client = com.MqttClient()
     # Delete this line, it was added temporarily so that the code we gave you had no errors.
     mqtt_client.connect_to_ev3()
@@ -60,7 +58,7 @@ def main():
 
     right_speed = right_speed_entry.get()
     left_speed = left_speed_entry.get()
-    # TODO: 3. Implement the callbacks for the drive buttons. Set both the click and shortcut key callbacks.
+    # DONE: 3. Implement the callbacks for the drive buttons. Set both the click and shortcut key callbacks.
     #
     # To help get you started the arm up and down buttons have been implemented.
     # You need to implement the five drive buttons.  One has been writen below to help get you started but is commented
@@ -121,7 +119,7 @@ def main():
 # ----------------------------------------------------------------------
 # Tkinter callbacks
 # ----------------------------------------------------------------------
-# TODO: 4. Implement the functions for the drive button callbacks.
+# DONE: 4. Implement the functions for the drive button callbacks.
 
 # TODO: 5. Call over a TA or instructor to sign your team's checkoff sheet and do a code review.  This is the final one!
 #

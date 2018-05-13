@@ -83,7 +83,7 @@ class Snatch3r(object):
         self.left_motor.wait_while("running")
         self.right_motor.wait_while("running")
 
-    def turn_left(self, inches, speed = 100, stop_action='brake'):
+    def turn_left(self, inches, speed=100, stop_action='brake'):
         k = 360 / 4.5
         degrees = k * inches
         self.left_motor.run_to_rel_pos(speed_sp=1,
@@ -157,17 +157,35 @@ class Snatch3r(object):
         self.left_motor.run_forever(speed_sp=left_speed)
         self.right_motor.run_forever(speed_sp=right_speed)
 
-    def set_back(self, left_speed, right_speed):
-        self.left_motor.run_forever(speed_sp=-left_speed)
-        self.right_motor.run_forever(speed_sp=-right_speed)
+    def set_back(self, left_speed, right_speed, stop_action="brake"):
+        k = 360 / 4.5
+        degrees = -1 * k * 10
+        self.left_motor.run_to_rel_pos(speed_sp=left_speed,
+                                       position_sp=degrees,
+                                       stop_action=stop_action)
+        self.right_motor.run_to_rel_pos(speed_sp=right_speed,
+                                        position_sp=degrees,
+                                        stop_action=stop_action)
 
-    def set_left(self, left_speed, right_speed):
-        self.left_motor.run_forever(speed_sp=-left_speed)
-        self.right_motor.run_forever(speed_sp=right_speed)
+    def set_left(self, left_speed, right_speed, stop_action="brake"):
+        k = 360 / 4.5
+        degrees = k * 10
+        self.left_motor.run_to_rel_pos(speed_sp=left_speed,
+                                       position_sp=-1 * degrees,
+                                       stop_action=stop_action)
+        self.right_motor.run_to_rel_pos(speed_sp=right_speed,
+                                        position_sp=degrees,
+                                        stop_action=stop_action)
 
-    def set_right(self, left_speed, right_speed):
-        self.left_motor.run_forever(speed_sp=left_speed)
-        self.right_motor.run_forever(speed_sp=-right_speed)
+    def set_right(self, left_speed, right_speed, stop_action="brake"):
+        k = 360 / 4.5
+        degrees = k * 10
+        self.left_motor.run_to_rel_pos(speed_sp=left_speed,
+                                       position_sp=degrees,
+                                       stop_action=stop_action)
+        self.right_motor.run_to_rel_pos(speed_sp=right_speed,
+                                        position_sp=-1 * degrees,
+                                        stop_action=stop_action)
 
     def set_stop(self):
         self.left_motor.stop(stop_action="brake")

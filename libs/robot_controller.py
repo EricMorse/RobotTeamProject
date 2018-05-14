@@ -158,9 +158,10 @@ class Snatch3r(object):
         self.right_motor.run_forever(speed_sp=right_speed)
 
     def set_back(self, left_speed, right_speed, stop_action="brake"):
-        back = -1*int(left_speed)
-        self.left_motor.run_forever(speed_sp=back, stop_action=stop_action)
-        self.right_motor.run_forever(speed_sp=back, stop_action=stop_action)
+        back_left = -1*int(left_speed)
+        back_right = -1*int(right_speed)
+        self.left_motor.run_forever(speed_sp=back_left, stop_action=stop_action)
+        self.right_motor.run_forever(speed_sp=back_right, stop_action=stop_action)
 
     def set_left(self, left_speed, right_speed, stop_action="brake"):
         left = -1*int(left_speed)

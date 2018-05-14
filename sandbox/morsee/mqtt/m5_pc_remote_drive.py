@@ -55,9 +55,9 @@ def main():
     right_speed_entry = ttk.Entry(main_frame, width=8, justify=tkinter.RIGHT)
     right_speed_entry.insert(0, "600")
     right_speed_entry.grid(row=1, column=2)
+    right_speed = int(right_speed_entry.get())
+    left_speed = int(left_speed_entry.get())
 
-    right_speed = right_speed_entry.get()
-    left_speed = left_speed_entry.get()
 
     # DONE: 3. Implement the callbacks for the drive buttons. Set both the click and shortcut key callbacks.
     #
@@ -149,27 +149,22 @@ def quit_program(mqtt_client, shutdown_ev3):
 
 
 def send_forward(mqtt_client, left_speed, right_speed):
-    print("set_forward")
     mqtt_client.send_message("set_forward", [left_speed, right_speed])
 
 
 def send_right(mqtt_client, left_speed, right_speed):
-    print("set_right")
     mqtt_client.send_message("set_right", [left_speed, right_speed])
 
 
 def send_left(mqtt_client, left_speed, right_speed):
-    print("set_left")
     mqtt_client.send_message("set_left", [left_speed, right_speed])
 
 
 def send_back(mqtt_client, left_speed, right_speed):
-    print("set_back")
     mqtt_client.send_message("set_back", [left_speed, right_speed])
 
 
 def send_stop(mqtt_client):
-    print("set_stop")
     mqtt_client.send_message("set_stop")
 
 # ----------------------------------------------------------------------

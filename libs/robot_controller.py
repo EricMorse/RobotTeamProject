@@ -25,7 +25,9 @@ class Snatch3r(object):
         self.touch_sensor = ev3.TouchSensor()
         self.MAX_SPEED = 900
         self.running = True
+        self.ir_sensor = ev3.InfraredSensor()
 
+        assert self.ir_sensor
         assert self.arm_motor.connected
         assert self.touch_sensor
         assert self.left_motor.connected

@@ -34,7 +34,7 @@ import mqtt_remote_method_calls as com
 def main():
     # DO: 2. Setup an mqtt_client.  Notice that since you don't need to receive any messages you do NOT need to have
     # a MyDelegate class.  Simply construct the MqttClient with no parameter in the constructor (easy).
-    mqtt_client = com.MqttClient
+    mqtt_client = com.MqttClient()
 
     mqtt_client.connect_to_ev3()
 
@@ -147,26 +147,34 @@ def quit_program(mqtt_client, shutdown_ev3):
     mqtt_client.close()
     exit()
 
+
 def send_forward(mqtt_client, left_speed, right_speed):
+    print("set_forward")
     mqtt_client.send_message("set_forward", [left_speed, right_speed])
 
 
 def send_right(mqtt_client, left_speed, right_speed):
+    print("set_right")
     mqtt_client.send_message("set_right", [left_speed, right_speed])
 
 
 def send_left(mqtt_client, left_speed, right_speed):
+    print("set_left")
     mqtt_client.send_message("set_left", [left_speed, right_speed])
 
 
 def send_back(mqtt_client, left_speed, right_speed):
+    print("set_back")
     mqtt_client.send_message("set_back", [left_speed, right_speed])
 
 
 def send_stop(mqtt_client):
+    print("set_stop")
     mqtt_client.send_message("set_stop")
 
 # ----------------------------------------------------------------------
 # Calls  main  to start the ball rolling.
 # ----------------------------------------------------------------------
+
+
 main()

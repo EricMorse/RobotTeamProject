@@ -221,4 +221,4 @@ class Snatch3r(object):
 
         print('Abandon ship!')
         self.stop()
-        return  False
+        return False

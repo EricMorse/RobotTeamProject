@@ -27,7 +27,7 @@ class Snatch3r(object):
         self.running = True
         self.ir_sensor = ev3.InfraredSensor()
         self.color_sensor = ev3.ColorSensor()
-        self.pixy = ev3.Sensor(driver_name='pixy_lego')
+        self.pixy = ev3.Sensor(driver_name="pixy-lego")
 
         assert self.pixy
         assert self.color_sensor

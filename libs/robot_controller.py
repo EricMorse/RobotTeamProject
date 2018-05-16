@@ -180,3 +180,7 @@ class Snatch3r(object):
     def set_stop(self):
         self.left_motor.stop(stop_action="brake")
         self.right_motor.stop(stop_action="brake")
+
+    def stop(self):
+        self.left_motor.stop(stop_action="brake")
+        self.right_motor.stop(stop_action="brake")

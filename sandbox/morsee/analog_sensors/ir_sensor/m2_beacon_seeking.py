@@ -31,7 +31,7 @@ def main():
         while True:
             seek_beacon(robot)
 
-            # TODO: 5. Save the result of the seek_beacon function (a bool), then use that value to only say "Found the
+            # DONE: 5. Save the result of the seek_beacon function (a bool), then use that value to only say "Found the
             # beacon" if the return value is True.  (i.e. don't say "Found the beacon" if the attempts was cancelled.)
             ev3.Sound.speak("Found the beacon")
 
@@ -93,16 +93,16 @@ def seek_beacon(robot):
                 # Close enough of a heading to move forward
                 print("On the right heading. Distance: ", current_distance)
                 # You add more!
-                if current_distance == 0:
-                    return
+                if current_distance <= 20:
+                    return True
                 else:
-                    robot.set_forward(400, 400)
+                    robot.set_forward(forward_speed, forward_speed)
             elif math.fabs(current_heading) < 10:
                 print("Adjusting heading: ", current_heading)
                 if current_heading < 0:
-                    robot.set_left(400, 400)
+                    robot.set_left(turn_speed, turn_speed)
                 else:
-                    robot.set_right(400, 400)
+                    robot.set_right(turn_speed, turn_speed)
             else:
                 print("Heading is too far off to fix: ", current_heading)
         time.sleep(0.2)

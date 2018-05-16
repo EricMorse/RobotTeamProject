@@ -26,7 +26,9 @@ class Snatch3r(object):
         self.MAX_SPEED = 900
         self.running = True
         self.ir_sensor = ev3.InfraredSensor()
+        self.color_sensor = ev3.ColorSensor()
 
+        assert self.color_sensor
         assert self.ir_sensor
         assert self.arm_motor.connected
         assert self.touch_sensor

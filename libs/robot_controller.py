@@ -233,7 +233,6 @@ class Snatch3r(object):
                 ev3.Sound.speak("Danger Will Robinson").wait()
                 time.sleep(0.2)
             while detect_flag:
-                print("x = {}, height = {}".format(self.pixy.value(1), self.pixy.value(4)))
                 if self.pixy.value(1) < 130 and self.pixy.value(4) >= 1:
                     self.spin_right(2)
                 elif self.pixy.value(1) > 190 and self.pixy.value(4) >= 1:
@@ -246,7 +245,7 @@ class Snatch3r(object):
             time.sleep(0.1)
         except ValueError:
             print("Nothing detected")
-
+        time.sleep(0.2)
 
     def deliver_package(self):
         self.pixy.mode = "SIG1"
@@ -260,6 +259,5 @@ class Snatch3r(object):
                 self.spin_left(2)
             else:
                 self.spin_right(2)
-        print("x = {}, width = {}".format(self.pixy.value(1), self.pixy.value(3)))
 
-        time.sleep(0.1)
+        time.sleep(0.2)

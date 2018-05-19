@@ -29,10 +29,10 @@ def main():
         # grab drink
         robot.stop()
         robot.arm_up()
-        # deliver package to customer
+        # deliver package to customer while avoiding ball
         while not delivered:
+            robot.avoid_ball()
             delivered = robot.deliver_package()
-        # check if drunk on path, if so, avoid and re-search for customer, if not, move towards customer
 
         time.sleep(0.5)
 

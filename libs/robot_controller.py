@@ -207,7 +207,7 @@ class Snatch3r(object):
                     else:
                         self.set_forward(forward_speed, forward_speed)
 
-                elif math.fabs(current_heading) < 10 :
+                elif math.fabs(current_heading) < 10:
                     print('Adjusting heading: ', current_heading)
                     if current_heading < 0:
                         self.set_left(turn_speed, turn_speed)
@@ -222,3 +222,44 @@ class Snatch3r(object):
         print('Abandon ship!')
         self.stop()
         return False
+
+    def avoid_ball(self):
+        detect_flag = False
+        print("Looking for danger!")
+        try:
+            self.pixy.mode = "SIG2"
+            if self.pixy.value(4) >= 1:
+                detect_flag = True
+                ev3.Sound.speak("Danger Will Robinson").wait()
+                time.sleep(0.2)
+            while detect_flag:
+                print("x = {}, height = {}".format(self.pixy.value(1), self.pixy.value(4)))
+                if self.pixy.value(1) < 130 and self.pixy.value(4) >= 1:
+                    self.spin_right(2)
+                elif self.pixy.value(1) > 190 and self.pixy.value(4) >= 1:
+                    self.spin_left(2)
+                elif self.pixy.value(4) == 0:
+                    self.forward(10)
+                    ev3.Sound.speak("Danger averted").wait()
+                    time.sleep(0.2)
+                    detect_flag = False
+            time.sleep(0.1)
+        except ValueError:
+            print("Nothing detected")
+
+
+    def deliver_package(self):
+        self.pixy.mode = "SIG1"
+        if 130 <= self.pixy.value(1) <= 190 and (self.pixy.value(4) >= 115 or self.pixy.value(3) >= 100):
+            self.arm_down()
+            return True
+        else:
+            if 0 < self.pixy.value(3) < 100:
+                self.forward(2)
+            elif self.pixy.value(1) < 130:
+                self.spin_left(2)
+            else:
+                self.spin_right(2)
+        print("x = {}, width = {}".format(self.pixy.value(1), self.pixy.value(3)))
+
+        time.sleep(0.1)

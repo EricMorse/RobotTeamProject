@@ -28,6 +28,10 @@ def main():
     # drink_width = robot.pixy.value(3)
     # drink_height = robot.pixy.value(4)
     robot.arm_down()
+    mqtt_client = com.MqttClient(robot)
+    mqtt_client.connect_to_pc()
+    print("Ready for package")
+    ev3.Sound.speak("Ready for package")
     while not robot.touch_sensor.is_pressed:
         # search for package
         # move to drink
@@ -37,18 +41,15 @@ def main():
         robot.stop()
         robot.arm_up()
         # deliver package to customer while avoiding ball
-        while not delivered:
-            # my_delegate = MyDelegate(dance_tag)
-            mqtt_client = com.MqttClient(robot)
-            mqtt_client.connect_to_pc()
-            robot.avoid_ball(mqtt_client)
-            delivered = robot.deliver_package(mqtt_client)
+    while not delivered:
+        # my_delegate = MyDelegate(dance_tag)
+        robot.avoid_ball(mqtt_client)
+        delivered = robot.deliver_package(mqtt_client)
 
         time.sleep(0.5)
 
     robot.stop()
     print("Goodbye")
-    ev3.Sound.speak("Goodbye").wait()
 
 
 main()

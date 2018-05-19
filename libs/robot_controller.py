@@ -224,18 +224,29 @@ class Snatch3r(object):
         return False
 
     def avoid_ball(self, mqtt_client):
-        detect_flag = False
+        detected_state = False
         print("Looking for danger!")
         try:
             self.pixy.mode = "SIG2"
             mqtt_client.send_message("on_oval_update",
                                      [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
                                       self.pixy.value(4)])
+            print("SIG2 x={},y={},width= {},height={}".format(self.pixy.value(1), self.pixy.value(2),
+                                                              self.pixy.value(3), self.pixy.value(4)))
             if self.pixy.value(4) >= 1:
-                detect_flag = True
+                detected_state = True
                 ev3.Sound.speak("Danger Will Robinson").wait()
+                mqtt_client.send_message("on_oval_update",
+                                         [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
+                                          self.pixy.value(4)])
                 time.sleep(0.2)
-            while detect_flag:
+            else:
+                mqtt_client.send_message("on_oval_update", [0, 0, 0, 0])
+                time.sleep(0.2)
+            while detected_state:
+                mqtt_client.send_message("on_oval_update",
+                                         [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
+                                          self.pixy.value(4)])
                 if self.pixy.value(1) < 130 and self.pixy.value(4) >= 1:
                     self.spin_right(2)
                 elif self.pixy.value(1) > 190 and self.pixy.value(4) >= 1:
@@ -243,9 +254,8 @@ class Snatch3r(object):
                 elif self.pixy.value(4) == 0:
                     self.forward(10)
                     ev3.Sound.speak("Danger averted").wait()
-                    time.sleep(0.2)
-                    detect_flag = False
-            time.sleep(0.1)
+                    detected_state = False
+                time.sleep(0.2)
         except ValueError:
             print("Nothing detected")
             mqtt_client.send_message("on_oval_update", [0, 0, 0, 0])
@@ -268,5 +278,5 @@ class Snatch3r(object):
 
         time.sleep(0.2)
 
-
+    
 

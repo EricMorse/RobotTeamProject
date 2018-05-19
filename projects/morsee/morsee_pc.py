@@ -28,12 +28,16 @@ def main():
     canvas = tkinter.Canvas(main_frame, background="lightgray", width=320, height=200)
     canvas.grid(columnspan=2)
 
-    rect_tag = canvas.create_rectangle(150, 90, 170, 110, fill="blue")
-    oval_tag = canvas.create_oval(150, 90, 170, 112, fill="orange")
-    # Buttons for quit and exit
+    rect_tag = canvas.create_rectangle(0, 0, 0, 0, fill="blue")
+    oval_tag = canvas.create_oval(0, 0, 0, 0, fill="orange")
+    # Buttons for quit and dance
     quit_button = ttk.Button(main_frame, text="Quit")
     quit_button.grid(row=3, column=1)
     quit_button["command"] = lambda: quit_program(mqtt_client, True)
+
+    dance_button = ttk.Button(main_frame, text="Dance")
+    dance_button.grid(row=3, column=2)
+    dance_button["command"] = lambda: dance(mqtt_client)
 
     # Create an MQTT connection
     my_delegate = MyDelegate(canvas, rect_tag, oval_tag)
@@ -51,6 +55,11 @@ def quit_program(mqtt_client, shutdown_ev3):
         mqtt_client.send_message("shutdown")
     mqtt_client.close()
     exit()
+
+
+def dance(mqtt_client):
+    print("dance")
+    mqtt_client.send_message("dance")
 
 
 main()

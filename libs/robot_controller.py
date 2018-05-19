@@ -199,12 +199,20 @@ class Snatch3r(object):
         self.right_motor.run_forever(speed_sp=back_right, stop_action=stop_action)
 
     def set_left(self, left_speed, right_speed, stop_action="brake"):
-        left = -1*int(left_speed)
+        if self.speed == 0:
+            left = -1*int(left_speed)
+        else:
+            left = -1*int(self.speed)
+            right_speed = self.speed
         self.left_motor.run_forever(speed_sp=left, stop_action=stop_action)
         self.right_motor.run_forever(speed_sp=right_speed, stop_action=stop_action)
 
     def set_right(self, left_speed, right_speed, stop_action="brake"):
-        right = -1*int(right_speed)
+        if self.speed == 0:
+            right = -1*int(right_speed)
+        else:
+            right = -1*int(self.speed)
+            left_speed = self.speed
         self.left_motor.run_forever(speed_sp=left_speed, stop_action=stop_action)
         self.right_motor.run_forever(speed_sp=right, stop_action=stop_action)
 
@@ -277,9 +285,9 @@ class Snatch3r(object):
                                          [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
                                           self.pixy.value(4)])
                 if self.pixy.value(1) < 130 and self.pixy.value(4) >= 1:
-                    self.spin_right(2)
+                    self.set_right(600, 600)
                 elif self.pixy.value(1) > 190 and self.pixy.value(4) >= 1:
-                    self.spin_left(2)
+                    self.set_left(600, 600)
                 elif self.pixy.value(4) == 0:
                     self.forward(10)
                     ev3.Sound.speak("Danger averted").wait()
@@ -299,11 +307,11 @@ class Snatch3r(object):
             return True
         else:
             if 0 < self.pixy.value(3) < 100:
-                self.forward(2)
+                self.set_forward(600, 600)
             elif self.pixy.value(1) < 130:
-                self.spin_left(2)
+                self.set_left(600, 600)
             else:
-                self.spin_right(2)
+                self.spin_right(600, 600)
 
         time.sleep(0.2)
 

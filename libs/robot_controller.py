@@ -278,5 +278,9 @@ class Snatch3r(object):
 
         time.sleep(0.2)
 
-    
-
+    def shutdown_new(self):
+        self.stop()
+        self.arm_down()
+        ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
+        ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
+        self.running = False

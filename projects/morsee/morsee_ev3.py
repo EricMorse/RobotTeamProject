@@ -45,11 +45,13 @@ def main():
         # my_delegate = MyDelegate(dance_tag)
         robot.avoid_ball(mqtt_client)
         delivered = robot.deliver_package(mqtt_client)
-
+        if not robot.running:
+            break
         time.sleep(0.5)
 
     robot.stop()
     print("Goodbye")
+    ev3.Sound.speak("Goodbye")
 
 
 main()

@@ -16,6 +16,7 @@ class MyDelegate(object):
     def on_oval_update(self, x, y, width, height):
         self.canvas.coords(self.oval_tag, [x, y, x + width, y + height])
 
+
 def main():
     root = tkinter.Tk()
     root.title = "Pixy display"
@@ -50,5 +51,6 @@ def quit_program(mqtt_client, shutdown_ev3):
         mqtt_client.send_message("shutdown")
     mqtt_client.close()
     exit()
+
 
 main()

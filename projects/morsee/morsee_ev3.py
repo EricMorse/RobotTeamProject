@@ -13,10 +13,12 @@ import mqtt_remote_method_calls as com
 # small blue recycle can deliver height = 130 or width 115 (width may be more reliable)
 # it can see the object from far away
 
+
 class MyDelegate(object):
 
     def __init__(self, dance_tag):
         self.dance = dance_tag
+
 
 def main():
     robot = robo.Snatch3r()

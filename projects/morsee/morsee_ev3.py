@@ -1,7 +1,7 @@
 import ev3dev.ev3 as ev3
 import time
 import robot_controller as robo
-# import mqtt_remote_method_calls as com
+import mqtt_remote_method_calls as com
 # Fast and Furious truck delivery program that delivers IR detected object to customer SIG1 (red) blue recycle can
 # while avoiding SIG2 (orange) green ball
 # IR should be used to grab object, grab when proximity < 10 (grab works)
@@ -12,6 +12,11 @@ import robot_controller as robo
 # if not detect on pixy height = 0
 # small blue recycle can deliver height = 130 or width 115 (width may be more reliable)
 # it can see the object from far away
+
+class MyDelegate(object):
+
+    def __init__(self, dance_tag):
+        self.dance = dance_tag
 
 def main():
     robot = robo.Snatch3r()
@@ -31,8 +36,11 @@ def main():
         robot.arm_up()
         # deliver package to customer while avoiding ball
         while not delivered:
-            robot.avoid_ball()
-            delivered = robot.deliver_package()
+            # my_delegate = MyDelegate(dance_tag)
+            mqtt_client = com.MqttClient(robot)
+            mqtt_client.connect_to_pc()
+            robot.avoid_ball(mqtt_client)
+            delivered = robot.deliver_package(mqtt_client)
 
         time.sleep(0.5)
 

@@ -223,11 +223,14 @@ class Snatch3r(object):
         self.stop()
         return False
 
-    def avoid_ball(self):
+    def avoid_ball(self, mqtt_client):
         detect_flag = False
         print("Looking for danger!")
         try:
             self.pixy.mode = "SIG2"
+            mqtt_client.send_message("on_oval_update",
+                                     [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
+                                      self.pixy.value(4)])
             if self.pixy.value(4) >= 1:
                 detect_flag = True
                 ev3.Sound.speak("Danger Will Robinson").wait()
@@ -245,10 +248,13 @@ class Snatch3r(object):
             time.sleep(0.1)
         except ValueError:
             print("Nothing detected")
+            mqtt_client.send_message("on_oval_update", [0, 0, 0, 0])
         time.sleep(0.2)
 
-    def deliver_package(self):
+    def deliver_package(self, mqtt_client):
         self.pixy.mode = "SIG1"
+        mqtt_client.send_message("on_rectangle_update", [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
+                                                         self.pixy.value(4)])
         if 130 <= self.pixy.value(1) <= 190 and (self.pixy.value(4) >= 115 or self.pixy.value(3) >= 100):
             self.arm_down()
             return True

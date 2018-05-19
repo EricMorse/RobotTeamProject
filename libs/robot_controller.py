@@ -303,6 +303,7 @@ class Snatch3r(object):
         mqtt_client.send_message("on_rectangle_update", [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
                                                          self.pixy.value(4)])
         if 130 <= self.pixy.value(1) <= 190 and (self.pixy.value(4) >= 115 or self.pixy.value(3) >= 100):
+            self.stop()
             self.arm_down()
             return True
         else:
@@ -324,4 +325,4 @@ class Snatch3r(object):
 
     def set_speed(self, msg):
         print("speed = {}".format(msg))
-        self.speed = msg
+        self.speed = int(msg)

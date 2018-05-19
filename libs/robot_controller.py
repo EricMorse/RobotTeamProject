@@ -24,6 +24,7 @@ class Snatch3r(object):
         self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
         self.touch_sensor = ev3.TouchSensor()
         self.MAX_SPEED = 900
+        self.speed = 0
         self.running = True
         self.ir_sensor = ev3.InfraredSensor()
         self.color_sensor = ev3.ColorSensor()
@@ -40,12 +41,20 @@ class Snatch3r(object):
     def forward(self, inches, speed=100, stop_action='brake'):
         k = 360 / 4.5
         degrees = k * inches
-        self.left_motor.run_to_rel_pos(speed_sp=8*speed,
-                                       position_sp=degrees,
-                                       stop_action=stop_action)
-        self.right_motor.run_to_rel_pos(speed_sp=8*speed,
-                                        position_sp=degrees,
-                                        stop_action=stop_action)
+        if self.speed == 0:
+            self.left_motor.run_to_rel_pos(speed_sp=8*speed,
+                                           position_sp=degrees,
+                                           stop_action=stop_action)
+            self.right_motor.run_to_rel_pos(speed_sp=8*speed,
+                                            position_sp=degrees,
+                                            stop_action=stop_action)
+        else:
+            self.left_motor.run_to_rel_pos(speed_sp=self.speed,
+                                           position_sp=degrees,
+                                           stop_action=stop_action)
+            self.right_motor.run_to_rel_pos(speed_sp=self.speed,
+                                            position_sp=degrees,
+                                            stop_action=stop_action)
 
         self.left_motor.wait_while("running")
         self.right_motor.wait_while("running")
@@ -66,12 +75,20 @@ class Snatch3r(object):
     def spin_left(self, inches, speed=100, stop_action='brake'):
         k = 360 / 4.5
         degrees = k * inches
-        self.left_motor.run_to_rel_pos(speed_sp=8*speed,
-                                       position_sp=-1*degrees,
-                                       stop_action=stop_action)
-        self.right_motor.run_to_rel_pos(speed_sp=8*speed,
-                                        position_sp=degrees,
-                                        stop_action=stop_action)
+        if self.speed == 0:
+            self.left_motor.run_to_rel_pos(speed_sp=8*speed,
+                                           position_sp=-1*degrees,
+                                           stop_action=stop_action)
+            self.right_motor.run_to_rel_pos(speed_sp=8*speed,
+                                            position_sp=degrees,
+                                            stop_action=stop_action)
+        else:
+            self.left_motor.run_to_rel_pos(speed_sp=self.speed,
+                                           position_sp=-1 * degrees,
+                                           stop_action=stop_action)
+            self.right_motor.run_to_rel_pos(speed_sp=self.speed,
+                                            position_sp=degrees,
+                                            stop_action=stop_action)
 
         self.left_motor.wait_while("running")
         self.right_motor.wait_while("running")
@@ -79,12 +96,20 @@ class Snatch3r(object):
     def spin_right(self, inches, speed=100, stop_action='brake'):
         k = 360 / 4.5
         degrees = k * inches
-        self.left_motor.run_to_rel_pos(speed_sp=8*speed,
-                                       position_sp=degrees,
-                                       stop_action=stop_action)
-        self.right_motor.run_to_rel_pos(speed_sp=8*speed,
-                                        position_sp=-1*degrees,
-                                        stop_action=stop_action)
+        if self.speed == 0:
+            self.left_motor.run_to_rel_pos(speed_sp=8*speed,
+                                           position_sp=degrees,
+                                           stop_action=stop_action)
+            self.right_motor.run_to_rel_pos(speed_sp=8*speed,
+                                            position_sp=-1*degrees,
+                                            stop_action=stop_action)
+        else:
+            self.left_motor.run_to_rel_pos(speed_sp=self.speed,
+                                           position_sp=degrees,
+                                           stop_action=stop_action)
+            self.right_motor.run_to_rel_pos(speed_sp=self.speed,
+                                            position_sp=-1 * degrees,
+                                            stop_action=stop_action)
 
         self.left_motor.wait_while("running")
         self.right_motor.wait_while("running")
@@ -160,8 +185,12 @@ class Snatch3r(object):
         self.running = False
 
     def set_forward(self, left_speed, right_speed):
-        self.left_motor.run_forever(speed_sp=left_speed)
-        self.right_motor.run_forever(speed_sp=right_speed)
+        if self.speed == 0:
+            self.left_motor.run_forever(speed_sp=left_speed)
+            self.right_motor.run_forever(speed_sp=right_speed)
+        else:
+            self.left_motor.run_forever(speed_sp=self.speed)
+            self.right_motor.run_forever(speed_sp=self.speed)
 
     def set_back(self, left_speed, right_speed, stop_action="brake"):
         back_left = -1*int(left_speed)
@@ -284,3 +313,7 @@ class Snatch3r(object):
         ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
         ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
         self.running = False
+
+    def set_speed(self, msg):
+        print("speed = {}".format(msg))
+        self.speed = msg

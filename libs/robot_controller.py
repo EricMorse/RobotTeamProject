@@ -270,28 +270,32 @@ class Snatch3r(object):
                                       self.pixy.value(4)])
             print("SIG2 x={},y={},width= {},height={}".format(self.pixy.value(1), self.pixy.value(2),
                                                               self.pixy.value(3), self.pixy.value(4)))
-            if self.pixy.value(4) >= 1:
+            if self.pixy.value(4) >= 1 and self.running:
                 detected_state = True
                 ev3.Sound.speak("Danger Will Robinson").wait()
                 mqtt_client.send_message("on_oval_update",
                                          [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
                                           self.pixy.value(4)])
                 time.sleep(0.2)
-            else:
+            elif self.running:
                 mqtt_client.send_message("on_oval_update", [0, 0, 0, 0])
                 time.sleep(0.2)
-            while detected_state:
+            while detected_state and self.running:
                 mqtt_client.send_message("on_oval_update",
                                          [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
                                           self.pixy.value(4)])
                 if self.pixy.value(1) < 130 and self.pixy.value(4) >= 1:
+                    self.stop()
                     self.set_right(600, 600)
                 elif self.pixy.value(1) > 190 and self.pixy.value(4) >= 1:
+                    self.stop()
                     self.set_left(600, 600)
                 elif self.pixy.value(4) == 0:
+                    self.stop()
                     self.forward(10)
                     ev3.Sound.speak("Danger averted").wait()
                     detected_state = False
+                    self.stop()
                 time.sleep(0.2)
         except ValueError:
             print("Nothing detected")
@@ -299,22 +303,26 @@ class Snatch3r(object):
         time.sleep(0.2)
 
     def deliver_package(self, mqtt_client):
-        self.pixy.mode = "SIG1"
-        mqtt_client.send_message("on_rectangle_update", [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
-                                                         self.pixy.value(4)])
-        if 130 <= self.pixy.value(1) <= 190 and (self.pixy.value(4) >= 115 or self.pixy.value(3) >= 100):
-            self.stop()
-            self.arm_down()
-            return True
-        else:
-            if 0 < self.pixy.value(3) < 100:
-                self.set_forward(600, 600)
-            elif self.pixy.value(1) < 130:
-                self.set_left(600, 600)
+        if self.running:
+            self.pixy.mode = "SIG1"
+            mqtt_client.send_message("on_rectangle_update", [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
+                                                             self.pixy.value(4)])
+            if 130 <= self.pixy.value(1) <= 190 and (self.pixy.value(4) >= 115 or self.pixy.value(3) >= 100):
+                self.stop()
+                self.arm_down()
+                return True
             else:
-                self.spin_right(600, 600)
+                if 0 < self.pixy.value(3) < 100:
+                    self.stop()
+                    self.set_forward(600, 600)
+                elif self.pixy.value(1) < 130:
+                    self.stop()
+                    self.set_left(600, 600)
+                else:
+                    self.stop()
+                    self.spin_right(600, 600)
 
-        time.sleep(0.2)
+            time.sleep(0.2)
 
     def shutdown_new(self):
         self.stop()

@@ -11,8 +11,8 @@ def main():
     #while not delivered:
     #    delivered = robot.deliver_package()
     #
-    while not robot.touch_sensor.is_pressed:
-        robot.avoid_ball()
+    robot.stop()
+    robot.arm_down()
     print("Goodbye")
     ev3.Sound.speak("Goodbye").wait()
 

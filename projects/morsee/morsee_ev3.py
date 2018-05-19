@@ -32,26 +32,28 @@ def main():
     mqtt_client.connect_to_pc()
     print("Ready for package")
     ev3.Sound.speak("Ready for package")
-    while not robot.touch_sensor.is_pressed:
+    while (not robot.touch_sensor.is_pressed) and robot.running:
         # search for package
         # move to drink
-        while robot.ir_sensor.proximity > 10:
+        while (robot.ir_sensor.proximity >= 7) and robot.running:
             robot.set_forward(400, 400)
         # grab drink
         robot.stop()
         robot.arm_up()
         # deliver package to customer while avoiding ball
-    while not delivered:
+    while (not delivered) and robot.running:
         # my_delegate = MyDelegate(dance_tag)
         robot.avoid_ball(mqtt_client)
         delivered = robot.deliver_package(mqtt_client)
-        if not robot.running:
-            break
         time.sleep(0.5)
 
     robot.stop()
-    print("Goodbye")
-    ev3.Sound.speak("Goodbye")
+    if delivered:
+        print("Delivery successful")
+        ev3.Sound.speak("Delivery successful")
+    else:
+        print("Goodbye")
+        ev3.Sound.speak("Goodbye")
 
 
 main()

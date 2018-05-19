@@ -261,3 +261,6 @@ class Snatch3r(object):
                 self.spin_right(2)
 
         time.sleep(0.2)
+
+
+

@@ -1,3 +1,7 @@
+# This is the pc side of the program.
+#
+# Author: Eric Morse
+
 import tkinter
 from tkinter import ttk
 import mqtt_remote_method_calls as com
@@ -18,6 +22,7 @@ class MyDelegate(object):
 
 
 def main():
+    # initializes the Pixy Display
     root = tkinter.Tk()
     root.title = "Pixy display"
 
@@ -30,7 +35,7 @@ def main():
 
     rect_tag = canvas.create_rectangle(0, 0, 0, 0, fill="blue")
     oval_tag = canvas.create_oval(0, 0, 0, 0, fill="green")
-    # Buttons for quit and dance
+    # Buttons for quit and set_speed
     quit_button = ttk.Button(main_frame, text="Quit")
     quit_button.grid(row=3, column=3)
     quit_button["command"] = lambda: quit_program(mqtt_client, True)
@@ -63,6 +68,7 @@ def quit_program(mqtt_client, shutdown_ev3):
     exit()
 
 
+# sets the speed of all ev3 movements when called
 def set_speed(mqtt_client, set_speed_label_entry):
     print("sent speed = {}".format(set_speed_label_entry.get()))
     mqtt_client.send_message("set_speed", [set_speed_label_entry.get()])

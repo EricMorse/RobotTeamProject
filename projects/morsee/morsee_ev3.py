@@ -1,23 +1,19 @@
+# Fast and Furious truck delivery program that delivers IR detected object to customer SIG1 (red) blue recycle can
+# while avoiding SIG2 (orange) green ball
+# IR should be used to grab object, grab when proximity < 10
+# Do not use beacon
+# avoid drunk width = 21 height = 30
+# small blue recycle can deliver height = 130 or width 115 (width may be more reliable)
+# it can see the object from far away
+#
+# This is the ev3 side of the program.
+#
+# Author: Eric Morse
+
 import ev3dev.ev3 as ev3
 import time
 import robot_controller as robo
 import mqtt_remote_method_calls as com
-# Fast and Furious truck delivery program that delivers IR detected object to customer SIG1 (red) blue recycle can
-# while avoiding SIG2 (orange) green ball
-# IR should be used to grab object, grab when proximity < 10 (grab works)
-# Do not use beacon
-# customer drop x =  163 y = 110 width = 21 height = 30
-# avoid drunk width = 21 height = 30
-
-# if not detect on pixy height = 0
-# small blue recycle can deliver height = 130 or width 115 (width may be more reliable)
-# it can see the object from far away
-
-
-class MyDelegate(object):
-
-    def __init__(self, dance_tag):
-        self.dance = dance_tag
 
 
 def main():
@@ -25,35 +21,36 @@ def main():
     # initialize SIG1 information
     robot.pixy.mode = "SIG1"
     delivered = False
-    # drink_width = robot.pixy.value(3)
-    # drink_height = robot.pixy.value(4)
+    # set robot arm ot initial position
     robot.arm_down()
     mqtt_client = com.MqttClient(robot)
     mqtt_client.connect_to_pc()
     # mqtt_client.connect_to_pc("35.194.247.175")  # Off campus IP address of a GCP broker
+    # announce that robot is ready
     print("Ready for package")
     ev3.Sound.speak("Ready for package")
     while (not robot.touch_sensor.is_pressed) and robot.running:
-        # search for package
-        # move to drink
+        # If package (blue recycle can) is too far, move closer
         while (robot.ir_sensor.proximity > 10) and robot.running:
             robot.set_forward(400, 400)
-        # grab drink
+        # grab package
         robot.stop()
         robot.arm_up()
-        # deliver package to customer while avoiding ball
+    # deliver package to customer while avoiding ball
     while (not delivered) and robot.running:
         robot.avoid_ball(mqtt_client)
         delivered = robot.deliver_package(mqtt_client)
-        time.sleep(0.5)
+        time.sleep(0.2)
 
     robot.stop()
     if delivered:
+        # announce that delivery was successful
         print("Delivery successful")
         ev3.Sound.speak("Delivery successful")
     else:
-        print("Goodbye")
-        ev3.Sound.speak("Goodbye")
+        # announce that program was quit
+        print("Quit command was called")
+        ev3.Sound.speak("Quit command was called")
 
 
 main()

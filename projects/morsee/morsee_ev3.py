@@ -30,6 +30,7 @@ def main():
     robot.arm_down()
     mqtt_client = com.MqttClient(robot)
     mqtt_client.connect_to_pc()
+    # mqtt_client.connect_to_pc("35.194.247.175")  # Off campus IP address of a GCP broker
     print("Ready for package")
     ev3.Sound.speak("Ready for package")
     while (not robot.touch_sensor.is_pressed) and robot.running:
@@ -42,7 +43,6 @@ def main():
         robot.arm_up()
         # deliver package to customer while avoiding ball
     while (not delivered) and robot.running:
-        # my_delegate = MyDelegate(dance_tag)
         robot.avoid_ball(mqtt_client)
         delivered = robot.deliver_package(mqtt_client)
         time.sleep(0.5)

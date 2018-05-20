@@ -38,7 +38,7 @@ def main():
     set_speed_label = ttk.Label(main_frame, text="Enter speed (0 to 900)")
     set_speed_label.grid(row=3, column=0)
     set_speed_label_entry = ttk.Entry(main_frame, width=8)
-    set_speed_label_entry.insert(0, "600")
+    set_speed_label_entry.insert(0, "400")
     set_speed_label_entry.grid(row=3, column=1)
 
     set_speed_button = ttk.Button(main_frame, text="Set speed")

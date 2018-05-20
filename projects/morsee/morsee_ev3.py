@@ -35,7 +35,7 @@ def main():
     while (not robot.touch_sensor.is_pressed) and robot.running:
         # search for package
         # move to drink
-        while (robot.ir_sensor.proximity >= 7) and robot.running:
+        while (robot.ir_sensor.proximity > 10) and robot.running:
             robot.set_forward(400, 400)
         # grab drink
         robot.stop()

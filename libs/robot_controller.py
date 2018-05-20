@@ -284,15 +284,15 @@ class Snatch3r(object):
                 mqtt_client.send_message("on_oval_update",
                                          [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
                                           self.pixy.value(4)])
-                if self.pixy.value(1) < 130 and self.pixy.value(4) >= 1:
+                if self.pixy.value(1) < 130 and self.pixy.value(4) > 2:
                     self.stop()
-                    self.set_right(600, 600)
-                elif self.pixy.value(1) > 190 and self.pixy.value(4) >= 1:
+                    self.set_right(400, 400)
+                elif self.pixy.value(1) > 190 and self.pixy.value(4) > 2:
                     self.stop()
-                    self.set_left(600, 600)
+                    self.set_left(400, 400)
                 elif self.pixy.value(4) == 0:
                     self.stop()
-                    self.forward(10)
+                    self.forward(8)
                     ev3.Sound.speak("Danger averted").wait()
                     detected_state = False
                     self.stop()
@@ -314,13 +314,13 @@ class Snatch3r(object):
             else:
                 if 0 < self.pixy.value(3) < 100:
                     self.stop()
-                    self.set_forward(600, 600)
+                    self.set_forward(400, 400)
                 elif self.pixy.value(1) < 130:
                     self.stop()
-                    self.set_left(600, 600)
+                    self.set_left(400, 400)
                 else:
                     self.stop()
-                    self.spin_right(600, 600)
+                    self.spin_right(400, 400)
 
             time.sleep(0.2)
 

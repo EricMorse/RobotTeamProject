@@ -27,12 +27,14 @@ def main():
     mqtt_client.connect_to_pc()
     # mqtt_client.connect_to_pc("35.194.247.175")  # Off campus IP address of a GCP broker
     # announce that robot is ready
+    while robot.speed == -1:
+        robot.detect_objects(mqtt_client)
     print("Ready for package")
     ev3.Sound.speak("Ready for package")
     while (not robot.touch_sensor.is_pressed) and robot.running:
         # If package (blue recycle can) is too far, move closer
-        while (robot.ir_sensor.proximity > 10) and robot.running:
-            robot.set_forward(400, 400)
+        while (robot.ir_sensor.proximity > 8) and robot.running:
+            robot.set_forward(0, 0)
         # grab package
         robot.stop()
         robot.arm_up()
@@ -40,7 +42,7 @@ def main():
     while (not delivered) and robot.running:
         robot.avoid_ball(mqtt_client)
         delivered = robot.deliver_package(mqtt_client)
-        time.sleep(0.2)
+        time.sleep(0.05)
 
     robot.stop()
     if delivered:

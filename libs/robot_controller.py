@@ -222,24 +222,26 @@ class Snatch3r(object):
         # uses speed argument value for speed
         if self.speed == -1:
             left = -1*int(left_speed)
+            right = right_speed
         else:
             # uses speed button value for speed instead
             left = -1*int(self.speed)
-            right_speed = self.speed
+            right = self.speed
         # runs the motors
         self.left_motor.run_forever(speed_sp=left, stop_action=stop_action)
-        self.right_motor.run_forever(speed_sp=right_speed, stop_action=stop_action)
+        self.right_motor.run_forever(speed_sp=right, stop_action=stop_action)
 
     # sets the robot to spin to the right
     def set_right(self, left_speed, right_speed, stop_action="brake"):
         # uses speed argument value for speed
         if self.speed == -1:
+            left = left_speed
             right = -1*int(right_speed)
         else:
             # uses speed button value for speed instead
             right = -1*int(self.speed)
-            left_speed = self.speed
-        self.left_motor.run_forever(speed_sp=left_speed, stop_action=stop_action)
+            left = self.speed
+        self.left_motor.run_forever(speed_sp=left, stop_action=stop_action)
         self.right_motor.run_forever(speed_sp=right, stop_action=stop_action)
 
     # stops the motors
@@ -308,24 +310,26 @@ class Snatch3r(object):
                 mqtt_client.send_message("on_oval_update",
                                          [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
                                           self.pixy.value(4)])
-                time.sleep(0.2)
             elif self.running:
                 # ball was not detected, send 0 values to remove ball from pc window
                 mqtt_client.send_message("on_oval_update", [0, 0, 0, 0])
-                time.sleep(0.2)
             while detected_state and self.running:
                 # ball was detected, send values to display ball on pc window
                 mqtt_client.send_message("on_oval_update",
                                          [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
                                           self.pixy.value(4)])
-                if self.pixy.value(1) < 130 and self.pixy.value(4) > 2:
+                if self.pixy.value(1) < 130 and self.pixy.value(4) >= 1:
                     # ball is left of robot, spin right to look away from ball
                     self.stop()
                     self.set_right(400, 400)
-                elif self.pixy.value(1) > 190 and self.pixy.value(4) > 2:
+                    time.sleep(1)
+                    self.forward(2)
+                elif self.pixy.value(1) > 190 and self.pixy.value(4) >= 1:
                     # ball is right of the robot, spin left to look away from the ball
                     self.stop()
                     self.set_left(400, 400)
+                    time.sleep(1)
+                    self.forward(2)
                 elif self.pixy.value(4) == 0:
                     # robot no longer sees ball, move forward 8 inches so that robot can move around ball
                     self.stop()
@@ -351,7 +355,7 @@ class Snatch3r(object):
                 self.arm_down()
                 return True
             else:
-                if 0 < self.pixy.value(3) < 100 and (130 < self.pixy.value(1) < 190):
+                if 0 < self.pixy.value(3) < 100:
                     # robot is pointed at SIG1, move forward to it
                     self.stop()
                     self.set_forward(400, 400)
@@ -378,3 +382,14 @@ class Snatch3r(object):
     def set_speed(self, speed_value):
         print("speed = {}".format(speed_value))
         self.speed = int(speed_value)
+
+    def detect_objects(self, mqtt_client):
+        self.pixy.mode = "SIG1"
+        mqtt_client.send_message("on_rectangle_update", [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
+                                                         self.pixy.value(4)])
+        time.sleep(0.1)
+        self.pixy.mode = "SIG2"
+        mqtt_client.send_message("on_oval_update",
+                                 [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
+                                  self.pixy.value(4)])
+        time.sleep(0.1)

@@ -366,6 +366,7 @@ class Snatch3r(object):
 
             time.sleep(0.2)
 
+    # shutdown the robot by stopping it, and setting its arm down, before completing shutdown
     def shutdown_new(self):
         self.stop()
         self.arm_down()
@@ -373,6 +374,7 @@ class Snatch3r(object):
         ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
         self.running = False
 
-    def set_speed(self, msg):
-        print("speed = {}".format(msg))
-        self.speed = int(msg)
+    # takes user input from pc to change the robot speed
+    def set_speed(self, speed_value):
+        print("speed = {}".format(speed_value))
+        self.speed = int(speed_value)

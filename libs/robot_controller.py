@@ -356,13 +356,13 @@ class Snatch3r(object):
                     self.stop()
                     self.set_forward(400, 400)
                 elif self.pixy.value(1) < 130:
-                    # robot is pointed left of SIG1, spin right to point at it
-                    self.stop()
-                    self.set_right(400, 400)
-                else:
-                    # robot is pointed right of SIG1, spin left to point at it
+                    # robot is pointed left of SIG1, spin left to point at it
                     self.stop()
                     self.set_left(400, 400)
+                else:
+                    # robot is pointed right of SIG1, spin right to point at it
+                    self.stop()
+                    self.set_right(400, 400)
 
             time.sleep(0.2)
 

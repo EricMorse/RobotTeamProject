@@ -24,7 +24,7 @@ class Snatch3r(object):
         self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
         self.touch_sensor = ev3.TouchSensor()
         self.MAX_SPEED = 900
-        self.speed = 0
+        self.speed = -1
         self.running = True
         self.ir_sensor = ev3.InfraredSensor()
         self.color_sensor = ev3.ColorSensor()
@@ -38,16 +38,19 @@ class Snatch3r(object):
         assert self.left_motor.connected
         assert self.right_motor.connected
 
+    # causes robot to move forward set number of inches
     def forward(self, inches, speed=100, stop_action='brake'):
         k = 360 / 4.5
         degrees = k * inches
-        if self.speed == 0:
+        # uses speed argument value for speed
+        if self.speed == -1:
             self.left_motor.run_to_rel_pos(speed_sp=8*speed,
                                            position_sp=degrees,
                                            stop_action=stop_action)
             self.right_motor.run_to_rel_pos(speed_sp=8*speed,
                                             position_sp=degrees,
                                             stop_action=stop_action)
+        # uses speed button value for speed instead
         else:
             self.left_motor.run_to_rel_pos(speed_sp=self.speed,
                                            position_sp=degrees,
@@ -59,6 +62,7 @@ class Snatch3r(object):
         self.left_motor.wait_while("running")
         self.right_motor.wait_while("running")
 
+    # causes robot to move forward set number of inches
     def backward(self, inches, speed=100, stop_action='brake'):
         k = 360 / 4.5
         degrees = -1 * k * inches
@@ -75,7 +79,8 @@ class Snatch3r(object):
     def spin_left(self, inches, speed=100, stop_action='brake'):
         k = 360 / 4.5
         degrees = k * inches
-        if self.speed == 0:
+        # uses speed argument value for speed
+        if self.speed == -1:
             self.left_motor.run_to_rel_pos(speed_sp=8*speed,
                                            position_sp=-1*degrees,
                                            stop_action=stop_action)
@@ -83,6 +88,7 @@ class Snatch3r(object):
                                             position_sp=degrees,
                                             stop_action=stop_action)
         else:
+            # uses speed button value for speed instead
             self.left_motor.run_to_rel_pos(speed_sp=self.speed,
                                            position_sp=-1 * degrees,
                                            stop_action=stop_action)
@@ -96,7 +102,8 @@ class Snatch3r(object):
     def spin_right(self, inches, speed=100, stop_action='brake'):
         k = 360 / 4.5
         degrees = k * inches
-        if self.speed == 0:
+        # uses speed argument value for speed
+        if self.speed == -1:
             self.left_motor.run_to_rel_pos(speed_sp=8*speed,
                                            position_sp=degrees,
                                            stop_action=stop_action)
@@ -104,6 +111,7 @@ class Snatch3r(object):
                                             position_sp=-1*degrees,
                                             stop_action=stop_action)
         else:
+            # uses speed button value for speed instead
             self.left_motor.run_to_rel_pos(speed_sp=self.speed,
                                            position_sp=degrees,
                                            stop_action=stop_action)
@@ -140,6 +148,7 @@ class Snatch3r(object):
         self.left_motor.wait_while("running")
         self.right_motor.wait_while("running")
 
+    # calibrates the robot arm
     def arm_calibration(self):
         self.arm_motor.run_forever(speed_sp=self.MAX_SPEED)
         while not self.touch_sensor.is_pressed:
@@ -152,6 +161,7 @@ class Snatch3r(object):
         ev3.Sound.beep().wait()
         self.arm_motor.position = 0  # Calibrate the down position as 0 (this line is correct as is).
 
+    # raises the robot arm
     def arm_up(self):
         self.arm_motor.run_forever(speed_sp=self.MAX_SPEED)
         while not self.touch_sensor.is_pressed:
@@ -159,6 +169,7 @@ class Snatch3r(object):
         self.arm_motor.stop(stop_action="brake")
         ev3.Sound.beep().wait()
 
+    # lowers the robot arm
     def arm_down(self):
         self.arm_motor.run_to_abs_pos(position_sp=-14.2, speed_sp=self.MAX_SPEED)
         self.arm_motor.wait_while(ev3.Motor.STATE_RUNNING)  # blocks until the motor finishes running
@@ -184,46 +195,64 @@ class Snatch3r(object):
         ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
         self.running = False
 
+    # sets the robot to move forward
     def set_forward(self, left_speed, right_speed):
-        if self.speed == 0:
+        # uses speed argument value for speed
+        if self.speed == -1:
             self.left_motor.run_forever(speed_sp=left_speed)
             self.right_motor.run_forever(speed_sp=right_speed)
         else:
+            # uses speed button value for speed instead
             self.left_motor.run_forever(speed_sp=self.speed)
             self.right_motor.run_forever(speed_sp=self.speed)
 
+    # sets the robot to move backwards
     def set_back(self, left_speed, right_speed, stop_action="brake"):
-        back_left = -1*int(left_speed)
-        back_right = -1*int(right_speed)
-        self.left_motor.run_forever(speed_sp=back_left, stop_action=stop_action)
-        self.right_motor.run_forever(speed_sp=back_right, stop_action=stop_action)
+        # uses speed argument value for speed
+        if self.speed == -1:
+            self.left_motor.run_forever(speed_sp=-1*int(left_speed), stop_action=stop_action)
+            self.right_motor.run_forever(speed_sp=-1*int(right_speed), stop_action=stop_action)
+        else:
+            # uses speed button value for speed instead
+            self.left_motor.run_forever(speed_sp=-1*self.speed, stop_action=stop_action)
+            self.right_motor.run_forever(speed_sp=-1*self.speed, stop_action=stop_action)
 
+    # sets the robot to spin to the left
     def set_left(self, left_speed, right_speed, stop_action="brake"):
-        if self.speed == 0:
+        # uses speed argument value for speed
+        if self.speed == -1:
             left = -1*int(left_speed)
         else:
+            # uses speed button value for speed instead
             left = -1*int(self.speed)
             right_speed = self.speed
+        # runs the motors
         self.left_motor.run_forever(speed_sp=left, stop_action=stop_action)
         self.right_motor.run_forever(speed_sp=right_speed, stop_action=stop_action)
 
+    # sets the robot to spin to the right
     def set_right(self, left_speed, right_speed, stop_action="brake"):
-        if self.speed == 0:
+        # uses speed argument value for speed
+        if self.speed == -1:
             right = -1*int(right_speed)
         else:
+            # uses speed button value for speed instead
             right = -1*int(self.speed)
             left_speed = self.speed
         self.left_motor.run_forever(speed_sp=left_speed, stop_action=stop_action)
         self.right_motor.run_forever(speed_sp=right, stop_action=stop_action)
 
+    # stops the motors
     def set_stop(self):
         self.left_motor.stop(stop_action="brake")
         self.right_motor.stop(stop_action="brake")
 
+    # stops the motors
     def stop(self):
         self.left_motor.stop(stop_action="brake")
         self.right_motor.stop(stop_action="brake")
 
+    # seeks out the beacon
     def seek_beacon(self):
         beacon_seeker = ev3.BeaconSeeker()
         forward_speed = 300
@@ -260,11 +289,14 @@ class Snatch3r(object):
         self.stop()
         return False
 
+    # steers robot away from the colored ball that is seen on pixy camera
     def avoid_ball(self, mqtt_client):
+        # initializes detected_state to false, since it hasn't tried to detect yet
         detected_state = False
-        print("Looking for danger!")
         try:
+            # switches pixy mode to SIG2 to detect color
             self.pixy.mode = "SIG2"
+            # sends detected ball information to pc
             mqtt_client.send_message("on_oval_update",
                                      [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
                                       self.pixy.value(4)])
@@ -278,19 +310,24 @@ class Snatch3r(object):
                                           self.pixy.value(4)])
                 time.sleep(0.2)
             elif self.running:
+                # ball was not detected, send 0 values to remove ball from pc window
                 mqtt_client.send_message("on_oval_update", [0, 0, 0, 0])
                 time.sleep(0.2)
             while detected_state and self.running:
+                # ball was detected, send values to display ball on pc window
                 mqtt_client.send_message("on_oval_update",
                                          [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
                                           self.pixy.value(4)])
                 if self.pixy.value(1) < 130 and self.pixy.value(4) > 2:
+                    # ball is left of robot, spin right to look away from ball
                     self.stop()
                     self.set_right(400, 400)
                 elif self.pixy.value(1) > 190 and self.pixy.value(4) > 2:
+                    # ball is right of the robot, spin left to look away from the ball
                     self.stop()
                     self.set_left(400, 400)
                 elif self.pixy.value(4) == 0:
+                    # robot no longer sees ball, move forward 8 inches so that robot can move around ball
                     self.stop()
                     self.forward(8)
                     ev3.Sound.speak("Danger averted").wait()
@@ -302,25 +339,30 @@ class Snatch3r(object):
             mqtt_client.send_message("on_oval_update", [0, 0, 0, 0])
         time.sleep(0.2)
 
+    # seeks SIG1 object to deliver package to
     def deliver_package(self, mqtt_client):
         if self.running:
             self.pixy.mode = "SIG1"
             mqtt_client.send_message("on_rectangle_update", [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
                                                              self.pixy.value(4)])
             if 130 <= self.pixy.value(1) <= 190 and (self.pixy.value(4) >= 115 or self.pixy.value(3) >= 100):
+                # robot is directly in front of the SIG1 object, lower arms to deliver package
                 self.stop()
                 self.arm_down()
                 return True
             else:
-                if 0 < self.pixy.value(3) < 100:
+                if 0 < self.pixy.value(3) < 100 and (130 < self.pixy.value(1) < 190):
+                    # robot is pointed at SIG1, move forward to it
                     self.stop()
                     self.set_forward(400, 400)
                 elif self.pixy.value(1) < 130:
+                    # robot is pointed left of SIG1, spin right to point at it
+                    self.stop()
+                    self.set_right(400, 400)
+                else:
+                    # robot is pointed right of SIG1, spin left to point at it
                     self.stop()
                     self.set_left(400, 400)
-                else:
-                    self.stop()
-                    self.spin_right(400, 400)
 
             time.sleep(0.2)
 

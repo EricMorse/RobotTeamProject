@@ -8,8 +8,9 @@ def main():
     mqtt_client = com.MqttClient(robot)
     mqtt_client.connect_to_pc()
 
-#    if robot.touch_sensor.is_pressed:
- #       pickup_reward(mqtt_client)
+    while 1:
+        if robot.touch_sensor.is_pressed:
+            pickup_reward(mqtt_client)
 
     robot.loop_forever()
 

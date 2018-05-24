@@ -400,7 +400,7 @@ class Snatch3r(object):
             while self.color_sensor.reflected_light_intensity > 80:
                 self.set_left(200, 200)
             self.set_stop()
-            while self.color_sensor.color != 3:
+            while self.color_sensor.color != 5:
                 if self.color_sensor.reflected_light_intensity > 85:
                     self.turn_left(1)
                 elif self.color_sensor.reflected_light_intensity < 10:
@@ -412,7 +412,7 @@ class Snatch3r(object):
             while self.color_sensor.reflected_light_intensity > 80:
                 self.set_right(200, 200)
             self.set_stop()
-            while not self.color_sensor.reflected_light_intensity > 15 & self.color_sensor.reflected_light_intensity < 25:
+            while self.color_sensor.color != 5:
                 if self.color_sensor.reflected_light_intensity > 85:
                     self.turn_right(1)
                 elif self.color_sensor.reflected_light_intensity < 10:

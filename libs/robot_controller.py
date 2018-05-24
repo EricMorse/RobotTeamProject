@@ -393,3 +393,18 @@ class Snatch3r(object):
                                  [self.pixy.value(1), self.pixy.value(2), self.pixy.value(3),
                                   self.pixy.value(4)])
         time.sleep(0.1)
+
+    def direction(self, dirct):
+        if dirct == 'left':
+            while self.color_sensor.reflected_light_intensity > 80:
+                self.turn_left(1.5)
+
+        elif dirct == 'right':
+            while self.color_sensor.reflected_light_intensity > 80:
+                self.turn_right(1.5)
+
+        while not self.color_sensor.reflected_light_intensity :
+            if self.color_sensor.reflected_light_intensity > 80:
+                self.turn_right(1.5)
+            else:
+                self.turn_left(1.5)

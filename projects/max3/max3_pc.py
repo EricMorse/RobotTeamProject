@@ -50,8 +50,11 @@ def quit_program(mqtt_client, shutdown_ev3):
     exit()
 
 
-def direction(mqtt_client, direction):
-    mqtt_client.send_message("direction", direction)
+def direction(mqtt_client, dirctn):
+    if dirctn == 'left':
+        mqtt_client.send_message("direction", 1)
+    elif dirctn == 'right':
+        mqtt_client.send_message("direction", 2)
 
 
 def start_pr(mqtt_client):

@@ -395,17 +395,19 @@ class Snatch3r(object):
         time.sleep(0.1)
 
     # Robot response to the direction command
-    def direction(self, dirct):
-        if dirct == 'left':
+    def direction(self, dirctn):
+        if dirctn == 1:
             while self.color_sensor.reflected_light_intensity > 80:
-                self.turn_left(1.5)
+                self.set_left(200, 200)
+            self.set_stop()
 
-        elif dirct == 'right':
+        elif dirctn == 2:
             while self.color_sensor.reflected_light_intensity > 80:
-                self.turn_right(1.5)
+                self.set_right(200, 200)
+            self.set_stop()
 
         # Move to the destination following the line.
-        while not self.color_sensor.reflected_light_intensity :
+        while not self.color_sensor.reflected_light_intensity > 10 & self.color_sensor.reflected_light_intensity < 25:
             if self.color_sensor.reflected_light_intensity > 80:
                 self.turn_right(1.5)
             else:

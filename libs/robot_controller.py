@@ -394,6 +394,7 @@ class Snatch3r(object):
                                   self.pixy.value(4)])
         time.sleep(0.1)
 
+    # Robot response to the direction command
     def direction(self, dirct):
         if dirct == 'left':
             while self.color_sensor.reflected_light_intensity > 80:
@@ -403,14 +404,17 @@ class Snatch3r(object):
             while self.color_sensor.reflected_light_intensity > 80:
                 self.turn_right(1.5)
 
+        # Move to the destination following the line.
         while not self.color_sensor.reflected_light_intensity :
             if self.color_sensor.reflected_light_intensity > 80:
                 self.turn_right(1.5)
             else:
                 self.turn_left(1.5)
 
+    # Avoid the block
     def start(self):
-        while self.ir_sensor.proximity >= 10:
-            self.left_motor.run_forever(speed_sp=self.speed)
-            self.right_motor.run_forever(speed_sp=self.speed)
+        while self.ir_sensor.proximity > 5:
+            self.set_forward(200, 200)
+            time.sleep(0.01)
+        self.set_stop()
 

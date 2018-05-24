@@ -7,11 +7,11 @@ def main():
     mqtt_client = com.MqttClient(robot)
     mqtt_client.connect_to_pc()
 
-    if robot.touch_sensor.is_pressed:
-        robot.arm_up()
-        if robot.touch_sensor.is_pressed:
-            ev3.Sound.speak("Thank you! Bye bye!").wait()
-            robot.shutdown()
+ #   if robot.touch_sensor.is_pressed:
+  #      robot.arm_up()
+   #     if robot.touch_sensor.is_pressed:
+    #        ev3.Sound.speak("Thank you! Bye bye!").wait()
+     #       robot.shutdown()
     robot.loop_forever()
 
 

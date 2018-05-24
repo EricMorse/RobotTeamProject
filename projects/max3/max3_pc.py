@@ -1,35 +1,40 @@
 """
-    This module is my final project. It
+    This module is the pc part of my final project. The robot will go straight and stop in front of a block. Then I will
+    use the tkinter window to choose a routine for it to move. The aim is to reach the termination behind the block.
+    After the robot arrives it destination, I will give it a reward and the robot will pick it up.
 """
 import tkinter
 from tkinter import ttk
 
 import mqtt_remote_method_calls as com
-mqtt_client = None
-# mqtt_client = com.MqttClient()
-# mqtt_client.connect_to_ev3()
 
-root = tkinter.Tk()
-root.title('Make a decision')
-main_frame = ttk.Frame(root, padding=20)
-main_frame.grid()
 
-start_bt = ttk.Button(main_frame, text='Start')
-start_bt['command'] = lambda: start()
-start_bt.grid(row=0, column=0)
+def main():
+    # mqtt_client = None
+    mqtt_client = com.MqttClient()
+    mqtt_client.connect_to_ev3()
 
-q_button = ttk.Button(main_frame, text="Quit")
-q_button.grid(row=0, column=2)
-q_button["command"] = lambda: quit_program(mqtt_client, True)
+    root = tkinter.Tk()
+    root.title('Make a decision')
+    main_frame = ttk.Frame(root, padding=20)
+    main_frame.grid()
 
-direction_entry = ttk.Entry(main_frame, width=15)
-direction_entry.grid(row=2,column=0)
+    start_bt = ttk.Button(main_frame, text='Start')
+    start_bt['command'] = lambda: start_pr(mqtt_client)
+    start_bt.grid(row=0, column=0)
 
-choose_bt = ttk.Button(main_frame, text='Choose a direction')
-choose_bt['command'] = lambda: direction(mqtt_client, direction_entry.get())
-choose_bt.grid(row=2, column=2)
+    q_button = ttk.Button(main_frame, text="Quit")
+    q_button.grid(row=0, column=2)
+    q_button["command"] = lambda: quit_program(mqtt_client, True)
 
-root.mainloop()
+    direction_entry = ttk.Entry(main_frame, width=15)
+    direction_entry.grid(row=2,column=0)
+
+    choose_bt = ttk.Button(main_frame, text='Choose a direction')
+    choose_bt['command'] = lambda: direction(mqtt_client, direction_entry.get())
+    choose_bt.grid(row=2, column=2)
+
+    root.mainloop()
 
 
 def quit_program(mqtt_client, shutdown_ev3):
@@ -41,8 +46,11 @@ def quit_program(mqtt_client, shutdown_ev3):
 
 
 def direction(mqtt_client, direction):
-    mqtt_client.send_message("dirction", direction)
+    mqtt_client.send_message("direction", direction)
 
 
-def start(mqtt_client):
+def start_pr(mqtt_client):
     mqtt_client.send_message("start")
+
+
+main()

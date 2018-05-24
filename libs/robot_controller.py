@@ -410,5 +410,7 @@ class Snatch3r(object):
                 self.turn_left(1.5)
 
     def start(self):
-        while self.ir_sensor.proximity >= 20:
-            self.set_forward(200, 200)
+        while self.ir_sensor.proximity >= 10:
+            self.left_motor.run_forever(speed_sp=self.speed)
+            self.right_motor.run_forever(speed_sp=self.speed)
+

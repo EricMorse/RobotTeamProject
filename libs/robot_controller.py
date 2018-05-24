@@ -400,18 +400,27 @@ class Snatch3r(object):
             while self.color_sensor.reflected_light_intensity > 80:
                 self.set_left(200, 200)
             self.set_stop()
+            while self.color_sensor.color != 3:
+                if self.color_sensor.reflected_light_intensity > 85:
+                    self.turn_left(1)
+                elif self.color_sensor.reflected_light_intensity < 10:
+                    self.turn_right(1)
+                else:
+                    self.set_forward(200, 200)
 
         elif dirctn == 2:
             while self.color_sensor.reflected_light_intensity > 80:
                 self.set_right(200, 200)
             self.set_stop()
-
-        # Move to the destination following the line.
-        while not self.color_sensor.reflected_light_intensity > 10 & self.color_sensor.reflected_light_intensity < 25:
-            if self.color_sensor.reflected_light_intensity > 80:
-                self.turn_right(1.5)
-            else:
-                self.turn_left(1.5)
+            while not self.color_sensor.reflected_light_intensity > 15 & self.color_sensor.reflected_light_intensity < 25:
+                if self.color_sensor.reflected_light_intensity > 85:
+                    self.turn_right(1)
+                elif self.color_sensor.reflected_light_intensity < 10:
+                    self.turn_left(1)
+                else:
+                    self.set_forward(200, 200)
+        # Move to the destination following the line. Destination: the green card, which hue is about 20.
+        self.set_stop()
 
     # Avoid the block
     def start(self):

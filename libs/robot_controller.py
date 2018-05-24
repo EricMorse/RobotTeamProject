@@ -183,6 +183,12 @@ class Snatch3r(object):
         self.running = True
         while self.running:
             time.sleep(0.1)  # Do nothing (except receive MQTT messages) until an MQTT message calls shutdown.
+            if self.touch_sensor.is_pressed:
+                time.sleep(0.5)
+                self.arm_up()
+                time.sleep(1)
+                ev3.Sound.speak("Thank you!").wait()
+                self.shutdown()
 
     def shutdown(self):
         # Modify a variable that will allow the loop_forever method to end. Additionally stop motors and set LEDs green.
@@ -399,7 +405,6 @@ class Snatch3r(object):
         if dirctn == 1:
             while self.color_sensor.reflected_light_intensity > 80:
                 self.set_left(200, 200)
-            self.set_stop()
             while self.color_sensor.color != 5:
                 if self.color_sensor.reflected_light_intensity > 85:
                     self.turn_left(1)
@@ -411,7 +416,6 @@ class Snatch3r(object):
         elif dirctn == 2:
             while self.color_sensor.reflected_light_intensity > 80:
                 self.set_right(200, 200)
-            self.set_stop()
             while self.color_sensor.color != 5:
                 if self.color_sensor.reflected_light_intensity > 85:
                     self.turn_right(1)

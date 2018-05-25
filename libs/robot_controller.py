@@ -183,7 +183,7 @@ class Snatch3r(object):
         self.running = True
         while self.running:
             time.sleep(0.1)  # Do nothing (except receive MQTT messages) until an MQTT message calls shutdown.
-            if self.touch_sensor.is_pressed:
+            if self.touch_sensor.is_pressed:    # The program ends.
                 time.sleep(0.5)
                 self.arm_up()
                 time.sleep(1)
@@ -403,32 +403,38 @@ class Snatch3r(object):
     # Robot response to the direction command
     def direction(self, dirctn):
         if dirctn == 1:
-            while self.color_sensor.reflected_light_intensity > 80:
+            while self.color_sensor.reflected_light_intensity > 70:
                 self.set_left(200, 200)
             while self.color_sensor.color != 5:
                 if self.color_sensor.reflected_light_intensity > 85:
-                    self.turn_left(1)
+                    self.turn_left(1.5)
+                    self.forward(0.1)
                 elif self.color_sensor.reflected_light_intensity < 10:
-                    self.turn_right(1)
+                    self.turn_right(1.5)
+                    self.forward(0.1)
                 else:
                     self.set_forward(200, 200)
+
+                time.sleep(0.01)
 
         elif dirctn == 2:
             while self.color_sensor.reflected_light_intensity > 80:
                 self.set_right(200, 200)
             while self.color_sensor.color != 5:
                 if self.color_sensor.reflected_light_intensity > 85:
-                    self.turn_right(1)
+                    self.turn_right(1.5)
                 elif self.color_sensor.reflected_light_intensity < 10:
-                    self.turn_left(1)
+                    self.turn_left(1.5)
                 else:
                     self.set_forward(200, 200)
+                    time.sleep(0.01)
+
         # Move to the destination following the line. Destination: the green card, which hue is about 20.
         self.set_stop()
 
     # Avoid the block
     def start(self):
-        while self.ir_sensor.proximity > 5:
+        while self.ir_sensor.proximity > 3 or self.ir_sensor.proximity == -128:
             self.set_forward(200, 200)
             time.sleep(0.01)
         self.set_stop()
